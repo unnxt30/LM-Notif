@@ -1,9 +1,9 @@
 package model
 
 type Message struct {
-	ID string 
-	topicName string
-	text string
+	ID string `json:"id"`
+	TopicName string `json:"topicName"`
+	Text string `json:"text"`
 }
 
 

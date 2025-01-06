@@ -47,6 +47,29 @@ func (m *MemoryStore) AddTopic(topic *models.Topic) error {
 		return errors.New("topic already exists")
 	}
 	m.topics[topic.TopicName] = topic
-	m.topics[topic.TopicName].UsersSubscribed = make([]models.User, 0)
+	return nil
+}
+
+func (m *MemoryStore) GetTopic(topicName string) (*models.Topic, error) {
+	topic, ok := m.topics[topicName]
+	if !ok {
+		return nil, errors.New("topic not found")
+	}
+	return topic, nil
+}
+
+func (m *MemoryStore) GetAllTopics() map[string]*models.Topic {
+	return m.topics
+}
+
+func (m *MemoryStore) AddUserToTopic(topicName string, user *models.User) error {
+	topic := m.topics[topicName]
+	// Check if user is already subscribed to the topic
+	for _, subscribedUser := range topic.UsersSubscribed {
+		if subscribedUser.Name == user.Name {
+			return errors.New("user already subscribed to topic")
+		}
+	}
+	topic.UsersSubscribed = append(topic.UsersSubscribed, *user)
 	return nil
 }

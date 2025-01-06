@@ -76,7 +76,7 @@ var getUsersCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		users := memory.GlobalMemoryStore.GetAllUsers()
 		for _, user := range users {
-			fmt.Println(user)
+			fmt.Printf("%v - %v\n", user.Name, user.Role)
 		}
 	},
 }
