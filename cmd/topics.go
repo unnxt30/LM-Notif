@@ -140,4 +140,5 @@ func init() {
 	rootCmd.AddCommand(addTopicCmd)
 	rootCmd.AddCommand(getTopicsCmd)
 	rootCmd.AddCommand(subScribeTopicCmd)
+	rootCmd.AddCommand(removeTopicCmd)
 }

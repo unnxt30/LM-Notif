@@ -50,11 +50,29 @@ subscribeTopic [topicName] [userName]
 publishMessage '[JSON_STRING]'
 ```
 
+- View Subscribed topics for a User:
+```bash
+viewSubscribedTopics [userName]
+```
+
+- Remove a user (admin role)
+```bash
+removeUser [userName] [caller]
+```
+
+- Remove a topic (admin role)
+```bash
+removeTopic [topicName] [userName]
+```
+
 ### ⚠️ Important Note for publishMessage
 The JSON string must be enclosed in single quotes. The format should be:
 ```bash
 publishMessage '{"id":"1", "topicName":"foo", "text":"bar"}'
 ```
+
+### ⚠️ Important Note for publishMessage
+The Timestamp functionality doesn't work right now, please refrain from using it.
 
 3. Exit the application:
 ```bash
