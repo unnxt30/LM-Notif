@@ -1,9 +1,12 @@
 package model
 
+import "time"
+
 type Message struct {
 	ID string `json:"id"`
 	TopicName string `json:"topicName"`
 	Text string `json:"text"`
+	TimeStamp time.Time `json:"timeStamp"`
 }
 
 

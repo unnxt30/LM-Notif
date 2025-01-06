@@ -81,7 +81,70 @@ var getUsersCmd = &cobra.Command{
 	},
 }
 
+var viewSubscribedTopicscmd = &cobra.Command{
+	Use: "viewSubscribedTopics [userName]",
+	Short: "View all topics a user is subscribed to",
+	Long: `View all topics a user is subscribed to`,
+	Args: cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		userName := args[0]
+		user, err := memory.GlobalMemoryStore.GetUser(userName)
+		if err != nil {
+			return fmt.Errorf("%w", err)
+		}
+		for topic := range user.SubTopics {
+			fmt.Println(topic)
+		}
+		return nil
+	},
+}
+
+var removeUserCmd = &cobra.Command{
+	Use: "removeUser [userName] [byUserName]",
+	Short: "Remove a user from the system",
+	Long: `Remove a user from the system`,
+	Args: cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		userName := args[0]
+		byUserName := args[1]
+
+		_, err := memory.GlobalMemoryStore.GetUser(userName)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+
+		byUser, err := memory.GlobalMemoryStore.GetUser(byUserName)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		if byUser.Name == userName {
+			fmt.Println("You cannot remove yourself")
+			return nil
+		}
+
+		if err := ValidateAdminRole(byUser); err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		
+		err = memory.GlobalMemoryStore.RemoveUser(userName)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		fmt.Println("User successfully removed")
+		return nil
+	},
+}
+
 func init(){
 	rootCmd.AddCommand(addUserCmd)
 	rootCmd.AddCommand(getUsersCmd)
+	rootCmd.AddCommand(viewSubscribedTopicscmd)
+	rootCmd.AddCommand(removeUserCmd)
 }

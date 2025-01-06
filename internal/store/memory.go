@@ -73,3 +73,19 @@ func (m *MemoryStore) AddUserToTopic(topicName string, user *models.User) error 
 	topic.UsersSubscribed = append(topic.UsersSubscribed, *user)
 	return nil
 }
+
+func (m *MemoryStore) RemoveUser(userName string) error {
+	if _, ok := m.users[userName]; !ok {
+		return errors.New("user not found")
+	}
+	delete(m.users, userName)
+	return nil
+}
+
+func (m *MemoryStore) RemoveTopic(topicName string) error {
+	if _, ok := m.topics[topicName]; !ok {
+		return errors.New("topic not found")
+	}
+	delete(m.topics, topicName)
+	return nil
+}

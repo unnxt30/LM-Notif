@@ -50,6 +50,7 @@ var addTopicCmd = &cobra.Command{
 		if err := memory.GlobalMemoryStore.AddTopic(topic); err != nil {
 			return err
 		}
+		fmt.Println("topic successfully added")
 		return nil
 	},
 }
@@ -91,6 +92,45 @@ var subScribeTopicCmd = &cobra.Command{
 		memory.GlobalMemoryStore.AddUserToTopic(topicName, user)
 		user.SubTopics[topicName] = true
 		fmt.Println("topic successfully subscribed")
+		return nil
+	},
+}
+
+var removeTopicCmd = &cobra.Command{
+	Use: "removeTopic [topicName] [caller]",
+	Short: "Remove a topic from the system",
+	Long: `Remove a topic from the system`,
+	Args: cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		topicName := args[0]
+		caller := args[1]
+		
+		user, err := memory.GlobalMemoryStore.GetUser(caller)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		err = ValidateAdminRole(user)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		_, err = memory.GlobalMemoryStore.GetTopic(topicName)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		
+		err = memory.GlobalMemoryStore.RemoveTopic(topicName)		
+
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		fmt.Println("topic successfully removed")
 		return nil
 	},
 }
